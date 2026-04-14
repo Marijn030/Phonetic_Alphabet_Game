@@ -71,11 +71,16 @@ textarea {
 
 <body>
 
-<!-- START SCREEN -->
 <div id="startScreen">
   <h1>Welcome to NATO Phonetic Game</h1>
   <p>Type your answer and press <b>Enter</b></p>
-  <p><b>Pick a mode below to begin</b></p>
+  <p><b>Pick a mode</b></p>
+
+  <div>
+    <button onclick="startAlphabetMode(false)">Alphabet Order</button>
+    <button onclick="startAlphabetMode(true)">Random Order</button>
+    <button onclick="startWordMode()">Word Mode</button>
+  </div>
 </div>
 
 <div class="container">
@@ -127,16 +132,12 @@ let order = [];
 let mode = "";
 let currentWord = "";
 
-/* Mistake tracking */
 let mistakes = {};
 letters.forEach(l => mistakes[l] = 0);
 
-/* Hide start screen */
 function hideStartScreen() {
   document.getElementById("startScreen").style.display = "none";
 }
-
-/* MODES */
 
 function startAlphabetMode(random) {
   hideStartScreen();
@@ -173,8 +174,6 @@ function startWordMode() {
   document.getElementById("feedback").innerHTML = "";
 }
 
-/* GAME FLOW */
-
 function nextLetter() {
   if (currentIndex >= order.length) {
     let summary = "<h3>Mistakes:</h3>";
@@ -199,8 +198,6 @@ function nextLetter() {
   document.getElementById("letterInput").value = "";
   document.getElementById("feedback").innerHTML = "";
 }
-
-/* INPUT HANDLERS */
 
 function handleLetterKey(e) {
   if (e.key !== "Enter") return;
