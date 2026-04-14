@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NATO Phonetic Game</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: #111;
+  color: #fff;
+}
+.container {
+  margin-top: 40px;
+}
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+input {
+  padding: 10px;
+  font-size: 18px;
+  width: 250px;
+  text-align: center;
+}
+#feedback {
+  margin-top: 15px;
+  font-size: 20px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>NATO Phonetic Alphabet Game</h1>
+
+  <div>
+    <button onclick="startAlphabetMode(false)">Alphabet Order</button>
+    <button onclick="startAlphabetMode(true)">Random Order</button>
+    <button onclick="startWordMode()">Word Mode</button>
+  </div>
+
+  <h2 id="prompt"></h2>
+  <input id="input" placeholder="Type answer..." onkeydown="handleKey(event)">
+  <div id="feedback"></div>
+</div>
+
+<script>
+const nato = {
+  A: "alpha", B: "bravo", C: "charlie", D: "delta", E: "echo",
+  F: "foxtrot", G: "golf", H: "hotel", I: "india", J: "juliett",
+  K: "kilo", L: "lima", M: "mike", N: "november", O: "oscar",
+  P: "papa", Q: "quebec", R: "romeo", S: "sierra", T: "tango",
+  U: "uniform", V: "victor", W: "whiskey", X: "x-ray", Y: "yankee", Z: "zulu"
+};
+
+let letters = Object.keys(nato);
+let currentIndex = 0;
+let order = [];
+let mode = "";
+let currentWord = "";
+
+function startAlphabetMode(random) {
+  mode = "alphabet";
+  order = [...letters];
+  if (random) order.sort(() => Math.random() - 0.5);
+  currentIndex = 0;
+  nextLetter();
+}
+
+function startWordMode() {
+  mode = "word";
+  const words = ["chatgpt", "hello", "world", "radio", "pilot", "secure"];
+  currentWord = words[Math.floor(Math.random() * words.length)].toUpperCase();
+  document.getElementById("prompt").textContent = "Spell this word in NATO: " + currentWord;
+  document.getElementById("input").value = "";
+  document.getElementById("feedback").textContent = "";
+}
+
+function nextLetter() {
+  if (currentIndex >= order.length) {
+    document.getElementById("prompt").textContent = "Done!";
+    return;
+  }
+  document.getElementById("prompt").textContent = "Letter: " + order[currentIndex];
+  document.getElementById("input").value = "";
+  document.getElementById("feedback").textContent = "";
+}
+
+function handleKey(e) {
+  if (e.key !== "Enter") return;
+  const input = document.getElementById("input").value.trim().toLowerCase();
+
+  if (mode === "alphabet") {
+    const correct = nato[order[currentIndex]];
+    if (input === correct) {
+      document.getElementById("feedback").textContent = "Correct!";
+      currentIndex++;
+      setTimeout(nextLetter, 500);
+    } else {
+      document.getElementById("feedback").textContent = "Wrong! Correct was: " + correct;
+    }
+  }
+
+  if (mode === "word") {
+    const correct = currentWord.split("").map(l => nato[l]).join(" ");
+    if (input === correct) {
+      document.getElementById("feedback").textContent = "Correct!";
+    } else {
+      document.getElementById("feedback").textContent = "Wrong! Correct was: " + correct;
+    }
+  }
+}
+</script>
+</body>
+</html>
