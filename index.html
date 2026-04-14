@@ -84,7 +84,7 @@ textarea {
 </div>
 
 <div class="container">
-  <h1>NATO Phonetic Alphabet Game</h1>
+  <h1>Phonetic Alphabet Game</h1>
 
   <div>
     <button onclick="startAlphabetMode(false)">Alphabet Order</button>
@@ -99,7 +99,7 @@ textarea {
   <br><br>
 
   <textarea id="wordInput"
-    placeholder="Type full NATO phonetic alphabet spelling here and press Enter..."
+    placeholder="Type full phonetic alphabet spelling here and press Enter..."
     onkeydown="handleWordKey(event)"
     style="display:none;"></textarea>
 
@@ -165,7 +165,7 @@ function startWordMode() {
   currentWord = words[Math.floor(Math.random() * words.length)].toUpperCase();
 
   document.getElementById("prompt").textContent =
-    "Spell this word in NATO phonetic alphabet: " + currentWord;
+    "Spell this word in the phonetic alphabet: " + currentWord;
 
   document.getElementById("description").textContent =
     descriptions[currentWord] || "";
