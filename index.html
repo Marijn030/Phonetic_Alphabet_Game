@@ -26,10 +26,20 @@ input {
   width: 250px;
   text-align: center;
 }
+textarea {
+  padding: 10px;
+  font-size: 18px;
+  width: 80%;
+  max-width: 600px;
+  height: 80px;
+  text-align: center;
+}
 #feedback {
   margin-top: 15px;
   font-size: 20px;
 }
+.correct { color: #4caf50; }
+.wrong { color: #f44336; }
 </style>
 </head>
 <body>
@@ -43,7 +53,11 @@ input {
   </div>
 
   <h2 id="prompt"></h2>
-  <input id="input" placeholder="Type answer..." onkeydown="handleKey(event)">
+
+  <input id="letterInput" placeholder="Type answer..." onkeydown="handleLetterKey(event)">
+  <br><br>
+  <textarea id="wordInput" placeholder="Type full NATO spelling..." onkeydown="handleWordKey(event)" style="display:none;"></textarea>
+
   <div id="feedback"></div>
 </div>
 
@@ -64,6 +78,9 @@ let currentWord = "";
 
 function startAlphabetMode(random) {
   mode = "alphabet";
+  document.getElementById("letterInput").style.display = "inline-block";
+  document.getElementById("wordInput").style.display = "none";
+
   order = [...letters];
   if (random) order.sort(() => Math.random() - 0.5);
   currentIndex = 0;
@@ -72,11 +89,14 @@ function startAlphabetMode(random) {
 
 function startWordMode() {
   mode = "word";
-  const words = ["chatgpt", "hello", "world", "radio", "pilot", "secure"];
+  document.getElementById("letterInput").style.display = "none";
+  document.getElementById("wordInput").style.display = "inline-block";
+
+  const words = ["chatgpt", "hello", "world", "radio", "pilot", "secure", "alphabet", "communication"];
   currentWord = words[Math.floor(Math.random() * words.length)].toUpperCase();
   document.getElementById("prompt").textContent = "Spell this word in NATO phonetic alphabet: " + currentWord;
-  document.getElementById("input").value = "";
-  document.getElementById("feedback").textContent = "";
+  document.getElementById("wordInput").value = "";
+  document.getElementById("feedback").innerHTML = "";
 }
 
 function nextLetter() {
@@ -85,32 +105,46 @@ function nextLetter() {
     return;
   }
   document.getElementById("prompt").textContent = "Letter: " + order[currentIndex];
-  document.getElementById("input").value = "";
-  document.getElementById("feedback").textContent = "";
+  document.getElementById("letterInput").value = "";
+  document.getElementById("feedback").innerHTML = "";
 }
 
-function handleKey(e) {
+function handleLetterKey(e) {
   if (e.key !== "Enter") return;
-  const input = document.getElementById("input").value.trim().toLowerCase();
+  const input = document.getElementById("letterInput").value.trim().toLowerCase();
+  const correct = nato[order[currentIndex]];
 
-  if (mode === "alphabet") {
-    const correct = nato[order[currentIndex]];
-    if (input === correct) {
-      document.getElementById("feedback").textContent = "Correct!";
-      currentIndex++;
-      setTimeout(nextLetter, 500);
+  if (input === correct) {
+    document.getElementById("feedback").innerHTML = `<span class='correct'>${input}</span>`;
+    currentIndex++;
+    setTimeout(nextLetter, 500);
+  } else {
+    document.getElementById("feedback").innerHTML = `<span class='wrong'>${input}</span> → <span class='correct'>${correct}</span>`;
+  }
+}
+
+function handleWordKey(e) {
+  if (e.key !== "Enter") return;
+
+  const input = document.getElementById("wordInput").value.trim().toLowerCase().split(" ");
+  const correctArr = currentWord.split("").map(l => nato[l]);
+
+  let result = "";
+  let allCorrect = true;
+
+  for (let i = 0; i < correctArr.length; i++) {
+    if (input[i] === correctArr[i]) {
+      result += `<span class='correct'>${correctArr[i]}</span> `;
     } else {
-      document.getElementById("feedback").textContent = "Wrong! Correct was: " + correct;
+      allCorrect = false;
+      result += `<span class='wrong'>${input[i] || "_"}</span> `;
     }
   }
 
-  if (mode === "word") {
-    const correct = currentWord.split("").map(l => nato[l]).join(" ");
-    if (input === correct) {
-      document.getElementById("feedback").textContent = "Correct!";
-    } else {
-      document.getElementById("feedback").textContent = "Wrong! Correct was: " + correct;
-    }
+  document.getElementById("feedback").innerHTML = result;
+
+  if (allCorrect) {
+    setTimeout(startWordMode, 800);
   }
 }
 </script>
