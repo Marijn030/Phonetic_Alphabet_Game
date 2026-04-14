@@ -38,6 +38,11 @@ textarea {
   margin-top: 15px;
   font-size: 20px;
 }
+#description {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #ccc;
+}
 .correct { color: #4caf50; }
 .wrong { color: #f44336; }
 </style>
@@ -53,10 +58,11 @@ textarea {
   </div>
 
   <h2 id="prompt"></h2>
+  <div id="description"></div>
 
   <input id="letterInput" placeholder="Type answer..." onkeydown="handleLetterKey(event)">
   <br><br>
-  <textarea id="wordInput" placeholder="Type full NATO spelling..." onkeydown="handleWordKey(event)" style="display:none;"></textarea>
+  <textarea id="wordInput" placeholder="Type full NATO phonetic alphabet spelling..." onkeydown="handleWordKey(event)" style="display:none;"></textarea>
 
   <div id="feedback"></div>
 </div>
@@ -70,6 +76,17 @@ const nato = {
   U: "uniform", V: "victor", W: "whiskey", X: "xray", Y: "yankee", Z: "zulu"
 };
 
+const descriptions = {
+  BZ: "Good job",
+  WTF: "What The F***",
+  LC: "Loud and Clear",
+  OM: "On the Move",
+  DS: "Dumb S***",
+  CF: "Cluster F***",
+  NG: "No Go",
+  ZT: "Zero Time (Greenwich time)"
+};
+
 let letters = Object.keys(nato);
 let currentIndex = 0;
 let order = [];
@@ -80,6 +97,7 @@ function startAlphabetMode(random) {
   mode = "alphabet";
   document.getElementById("letterInput").style.display = "inline-block";
   document.getElementById("wordInput").style.display = "none";
+  document.getElementById("description").textContent = "";
 
   order = [...letters];
   if (random) order.sort(() => Math.random() - 0.5);
@@ -92,9 +110,13 @@ function startWordMode() {
   document.getElementById("letterInput").style.display = "none";
   document.getElementById("wordInput").style.display = "inline-block";
 
-  const words = ["chatgpt", "hello", "world", "radio", "pilot", "secure", "alphabet", "communication"];
+  const words = ["bz", "wtf", "vc", "lc", "om", "ds", "cf", "ng", "zt"];
   currentWord = words[Math.floor(Math.random() * words.length)].toUpperCase();
+
   document.getElementById("prompt").textContent = "Spell this word in NATO phonetic alphabet: " + currentWord;
+
+  document.getElementById("description").textContent = descriptions[currentWord] || "";
+
   document.getElementById("wordInput").value = "";
   document.getElementById("feedback").innerHTML = "";
 }
