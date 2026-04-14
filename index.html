@@ -110,7 +110,7 @@ function startWordMode() {
   document.getElementById("letterInput").style.display = "none";
   document.getElementById("wordInput").style.display = "inline-block";
 
-  const words = ["bz", "wtf", "vc", "lc", "om", "ds", "cf", "ng", "zt"];
+  const words = ["bz", "wtf", "lc", "om", "ds", "cf", "ng", "zt"];
   currentWord = words[Math.floor(Math.random() * words.length)].toUpperCase();
 
   document.getElementById("prompt").textContent = "Spell this word in NATO phonetic alphabet: " + currentWord;
