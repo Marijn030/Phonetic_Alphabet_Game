@@ -53,7 +53,7 @@ const nato = {
   F: "foxtrot", G: "golf", H: "hotel", I: "india", J: "juliett",
   K: "kilo", L: "lima", M: "mike", N: "november", O: "oscar",
   P: "papa", Q: "quebec", R: "romeo", S: "sierra", T: "tango",
-  U: "uniform", V: "victor", W: "whiskey", X: "x-ray", Y: "yankee", Z: "zulu"
+  U: "uniform", V: "victor", W: "whiskey", X: "xray", Y: "yankee", Z: "zulu"
 };
 
 let letters = Object.keys(nato);
@@ -74,7 +74,7 @@ function startWordMode() {
   mode = "word";
   const words = ["chatgpt", "hello", "world", "radio", "pilot", "secure"];
   currentWord = words[Math.floor(Math.random() * words.length)].toUpperCase();
-  document.getElementById("prompt").textContent = "Spell this word in NATO: " + currentWord;
+  document.getElementById("prompt").textContent = "Spell this word in NATO phonetic alphabet: " + currentWord;
   document.getElementById("input").value = "";
   document.getElementById("feedback").textContent = "";
 }
